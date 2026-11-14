@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: orbit
+      POSTGRES_USER: orbit
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orbit -d orbit"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    build: ./backend
+    environment:
+      ORBIT_DATABASE_URL: ${ORBIT_DATABASE_URL:-postgresql+psycopg://orbit:${POSTGRES_PASSWORD}@db:5432/orbit}
+      ORBIT_OIDC_ISSUER: ${ORBIT_OIDC_ISSUER:-}
+      ORBIT_OIDC_AUDIENCE: ${ORBIT_OIDC_AUDIENCE:-}
+      ORBIT_OIDC_CLIENT_ID: ${ORBIT_OIDC_CLIENT_ID:-}
+      ORBIT_OIDC_REDIRECT_URI: ${ORBIT_OIDC_REDIRECT_URI:-}
+      ORBIT_CORS_ORIGINS: ${ORBIT_CORS_ORIGINS:-http://localhost:8080}
+      ORBIT_ENV: ${ORBIT_ENV:-development}
+      ORBIT_ALLOW_DEV_AUTH: ${ORBIT_ALLOW_DEV_AUTH:-true}
+      ORBIT_OPENAI_MODEL: ${ORBIT_OPENAI_MODEL:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    expose: ["8000"]
+    restart: unless-stopped
+
+  web:
+    image: nginx:1.27-alpine
+    depends_on: [api]
+    ports: ["8080:8080"]
+    volumes:
+      - ./app:/usr/share/nginx/html:ro
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    read_only: true
+    tmpfs: [/var/cache/nginx, /var/run, /tmp]
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+

@@ -1,0 +1,18 @@
+:root{--dk:#12141c;--lt:#f4f2ec;--ac:#8aa0ff;--mu:#a3a8b8;--ink:#1b1d26}
+.s{padding:128px;display:flex;flex-direction:column;gap:40px;font-family:Inter,sans-serif}
+.dk{background:var(--dk);color:var(--lt)}.lt{background:var(--lt);color:var(--ink)}
+.s h1{font:700 136px/1.05 "Space Grotesk",sans-serif;margin:0}
+.s h2{font:700 76px/1.1 "Space Grotesk",sans-serif;margin:0}
+.s h3{font:700 38px/1.2 "Space Grotesk",sans-serif;margin:0 0 14px}
+.s p{font-size:32px;line-height:1.4;margin:0}
+.s .sub{font-size:44px;line-height:1.35;color:var(--mu)}.lt .sub{color:#555a6a}
+.s .tag{font-size:26px;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}.lt .tag{color:#3a55d6}
+.s .mid{justify-content:center}
+.s .cards{display:flex;gap:32px}
+.s .card{flex:1;padding:40px;border-radius:22px;border:2px solid #343849}
+.lt .card{background:#fff;border-color:#dcd8cb}
+.s .card p{font-size:28px;color:var(--mu)}.lt .card p{color:#555a6a}
+.s table{border-collapse:collapse;width:100%}
+.s th,.s td{text-align:left;padding:22px 26px;font-size:30px;border-bottom:2px solid #343849}
+.s th{color:var(--ac);font-size:26px;letter-spacing:.1em;text-transform:uppercase}
+.s .big{font:700 96px/1 "Space Grotesk",sans-serif;color:var(--ac)}
